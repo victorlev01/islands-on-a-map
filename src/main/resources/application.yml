@@ -1,0 +1,41 @@
+app:
+  init-on-start: true
+  map-api:
+    url: ${map.api.url:https://private-2e8649-advapi.apiary-mock.com/map}
+spring:
+  application:
+    name: islands-on-a-map
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2
+server:
+  port: 8088
+  use-forward-headers: true
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONTESTKOTLINAPPLICATION
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %clr(%-5level) [%thread] %logger{25} [%file:%line] %msg%n"
+  level:
+    root: info
+    sun: warn
+    springfox: info
+    org.springframework: info
+    org.h2: warn
+    org.hibernate: info
+    com.advanon: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

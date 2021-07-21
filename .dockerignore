@@ -1,0 +1,12 @@
+build/classes
+build/reports
+build/test-results
+build/tmp
+src
+build.gradle
+settings.gradle
+gradle.properties
+README.md
+.gitignore
+.idea
+.gradle

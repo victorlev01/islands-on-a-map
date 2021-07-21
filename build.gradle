@@ -1,0 +1,90 @@
+group 'com.advanon.levitskiy'
+buildscript {
+    ext {
+        kotlin_version = '1.2.71' // Required for Kotlin integration
+        spring_boot_version = '2.0.5.RELEASE'
+        spring_fox_version = '2.9.2'
+        jackson_version = '2.9.7'
+        h2_version = 'LATEST'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // Required for Kotlin integration
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: "kotlin-spring"
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+jar {
+    baseName = 'islands-on-a-map'
+    version = '1.0-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+            "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
+            "org.springframework.boot:spring-boot-starter-web",
+            "org.springframework.boot:spring-boot-starter-data-jpa",
+            "org.springframework.boot:spring-boot-configuration-processor",
+            "org.springframework.boot:spring-boot-starter-actuator",
+            "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version",
+            "com.h2database:h2")
+    compile "io.springfox:springfox-swagger2:$spring_fox_version"
+    compile "io.springfox:springfox-swagger-ui:$spring_fox_version"
+
+    testImplementation(
+            "org.springframework.boot:spring-boot-starter-test",
+            "org.junit.jupiter:junit-jupiter-api",
+            "org.junit.jupiter:junit-jupiter-params",
+    )
+
+    testRuntimeOnly(
+            "org.junit.jupiter:junit-jupiter-engine",
+    )
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+
+test {
+
+    systemProperty 'outputDir', "$buildDir/tmp/"
+
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+    reports {
+        junitXml.enabled false
+        html.enabled false
+    }
+
+    testLogging {
+        events 'skipped', 'failed'
+        exceptionFormat = 'full'
+
+        debug {
+            events "started", "passed", "skipped", "failed"
+        }
+
+        info {
+            events "passed", "skipped", "failed"
+        }
+    }
+
+}
